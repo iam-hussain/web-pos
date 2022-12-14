@@ -16,7 +16,7 @@ import {
 import Login from "@mui/icons-material/Login";
 
 import Island from "@components/templates/island";
-import { USER_LOGIN } from "@gql/mutation";
+import { USER_LOGIN } from "@graphql/mutation";
 import { setCookie } from "cookies-next";
 import _ from "lodash";
 import Input from "@components/atoms/input";

@@ -7,8 +7,8 @@ import { Box, Divider, Link, Paper, Typography, Button } from "@mui/material";
 import AppRegistration from "@mui/icons-material/AppRegistration";
 import { useRouter } from "next/router";
 
-import { USER_REGISTER } from "@gql/mutation";
-import { USER_DUPLICATE_CHECK } from "@gql/query";
+import { USER_REGISTER } from "@graphql/mutation";
+import { USER_DUPLICATE_CHECK } from "@graphql/query";
 import Island from "@components/templates/island";
 import Input from "@components/atoms/input";
 import _ from "lodash";
