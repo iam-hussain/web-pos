@@ -26,7 +26,9 @@
       "@components/atoms/*": ["src/components/atoms/*"],
       "@components/molecules/*": ["src/components/molecules/*"],
       "@components/templates/*": ["src/components/templates/*"],
-      "@styles/*": ["src/styles/*"]
+      "@gql/*": ["src/gql/*"],
+      "@styles/*": ["src/styles/*"],
+      "@helper/*": ["src/helper/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

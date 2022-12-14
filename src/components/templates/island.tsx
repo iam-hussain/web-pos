@@ -20,7 +20,7 @@ function Island({ children }: any) {
           justifyContent: "center",
         }}
       >
-        <BrandCleanSvg className="svg-mid" name="dd" />
+        <BrandCleanSvg className="svg-mid" />
       </Grid>
       <Grid
         item
