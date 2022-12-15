@@ -1,25 +1,25 @@
 import React from "react";
-import NextLink from "next/link";
 import { Formik } from "formik";
 import { useQuery, useMutation } from "@apollo/client";
-import { Box, Divider, Link, Paper, Typography, Button } from "@mui/material";
+import { Box, Paper, Typography } from "@mui/material";
 import AppRegistration from "@mui/icons-material/AppRegistration";
 import { useRouter } from "next/router";
-
 import { USER_REGISTER } from "@graphql/mutation";
 import { USER_DUPLICATE_CHECK } from "@graphql/query";
 import Island from "@components/templates/island";
 import Input from "@components/atoms/input";
 import _ from "lodash";
-import { setCookie } from "cookies-next";
 import { registerValidation } from "@helpers/validationSchema";
 import { getMessage } from "@helpers/message";
 import useToken from "@hooks/useToken";
 import withAuthorization from "@providers/withAuthorization";
+import AuthOption from "@components/molecules/auth-option";
+import LoadingButton from "@mui/lab/LoadingButton";
 
-function Register({ reAuth }: any) {
+function Register() {
   const router = useRouter();
   const token = useToken();
+  const [loading, setLoading] = React.useState(false);
   const [mutateFunction] = useMutation(USER_REGISTER);
   const { refetch } = useQuery(USER_DUPLICATE_CHECK, {
     skip: true,
@@ -38,14 +38,12 @@ function Register({ reAuth }: any) {
 
       const emailDubRes = _.get(emailDub, "data.userDuplicateCheck");
       const mobDubRes = _.get(mobDub, "data.userDuplicateCheck");
-
       const error: any = {};
-
       if (emailDubRes) {
-        error.email = getMessage("email_duplicate");
+        error.email = getMessage("EMAIL_DUPLICATE");
       }
       if (mobDubRes) {
-        error.mobileNumber = getMessage("mobile_duplicate");
+        error.mobileNumber = getMessage("MOBILE_DUPLICATE");
       }
 
       if (!emailDubRes && !mobDubRes) {
@@ -53,17 +51,21 @@ function Register({ reAuth }: any) {
         const jwt = _.get(result, "data.userRegister");
         if (jwt) {
           token.setToken(jwt);
-          reAuth();
-          router.push("/dashboard");
-          resetForm();
+          router.push("/");
+        } else {
+          setSubmitting(false);
+          setLoading(false);
         }
       } else {
         setErrors(error);
+        setSubmitting(false);
+        setLoading(false);
       }
     } catch (error: any) {
       console.error(error);
+      setSubmitting(false);
+      setLoading(false);
     }
-    setSubmitting(false);
   }
 
   return (
@@ -81,6 +83,7 @@ function Register({ reAuth }: any) {
             maxWidth: 500,
             "@media (max-width: 780px)": {
               padding: 2,
+              paddingY: 4,
             },
           }}
         >
@@ -140,49 +143,30 @@ function Register({ reAuth }: any) {
                     label="Confirm Password"
                     type="password"
                   />
-                  <Button
+                  <LoadingButton
                     sx={{
                       padding: 1,
                       paddingInline: 4,
                       marginInline: 2,
                     }}
                     variant="contained"
+                    loading={isSubmitting || loading}
+                    loadingPosition="end"
                     endIcon={<AppRegistration />}
                     color={"secondary"}
                     type="submit"
-                    disabled={isSubmitting}
                   >
                     Create Account
-                  </Button>
+                  </LoadingButton>
                 </Box>
               </form>
             )}
           </Formik>
-          <Divider
-            variant="middle"
-            sx={{
-              paddingTop: 4,
-            }}
+          <AuthOption
+            dek={"Already have an account?"}
+            link={"/login"}
+            btnText={"Log In"}
           />
-          <Box
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-            justifyContent="center"
-            gap={2}
-            sx={{
-              paddingTop: 4,
-            }}
-          >
-            <Typography variant="body1" align="center">
-              Already have an account?{" "}
-              <NextLink href={`/register`}>
-                <Link variant="body1" component="button" color={"primary.main"}>
-                  Log In
-                </Link>
-              </NextLink>
-            </Typography>
-          </Box>
         </Paper>
       </Box>
     </Island>
