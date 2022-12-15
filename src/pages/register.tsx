@@ -15,7 +15,7 @@ import { setCookie } from "cookies-next";
 import { registerValidation } from "@helpers/validationSchema";
 import { getMessage } from "@helpers/message";
 import useToken from "@hooks/useToken";
-import withAuthorization from "@helpers/withAuthorization";
+import withAuthorization from "@providers/withAuthorization";
 
 function Register({ reAuth }: any) {
   const router = useRouter();
@@ -189,4 +189,4 @@ function Register({ reAuth }: any) {
   );
 }
 
-export default withAuthorization(Register, "no_auth");
+export default withAuthorization(Register, "shouldNotBeNoOne");

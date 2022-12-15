@@ -3,15 +3,14 @@ import { HEADER_TOKEN_KEY } from "@providers/constants";
 
 export default function useToken() {
   const getToken = () => getCookie(HEADER_TOKEN_KEY);
-  const setToken = (token: string) => setCookie(HEADER_TOKEN_KEY, token);
-  const deleteToken = () => deleteCookie(HEADER_TOKEN_KEY);
-  const hasToken = () => {
-    const jwt = getToken();
-    if (jwt && typeof jwt === "string") {
-      return true;
-    }
-    return false;
+  const setToken = (token: string) => {
+    setCookie(HEADER_TOKEN_KEY, token);
+    window.localStorage.setItem("login", Date.now().toString());
+  };
+  const deleteToken = () => {
+    deleteCookie(HEADER_TOKEN_KEY);
+    window.localStorage.setItem("logout", Date.now().toString());
   };
 
-  return { getToken, setToken, deleteToken, hasToken };
+  return { getToken, setToken, deleteToken };
 }

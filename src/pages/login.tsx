@@ -21,9 +21,9 @@ import { setCookie } from "cookies-next";
 import _ from "lodash";
 import Input from "@components/atoms/input";
 import useToken from "@hooks/useToken";
-import withAuthorization from "@helpers/withAuthorization";
+import withAuthorization from "@providers/withAuthorization";
 
-function LogIn({ reAuth }: any) {
+function LogIn(props: any) {
   const router = useRouter();
   const token = useToken();
   const [mutateFunction] = useMutation(USER_LOGIN);
@@ -56,7 +56,6 @@ function LogIn({ reAuth }: any) {
 
       if (jwt) {
         token.setToken(jwt);
-        reAuth();
         router.push("/dashboard");
         resetForm();
       }
@@ -183,4 +182,4 @@ function LogIn({ reAuth }: any) {
   );
 }
 
-export default withAuthorization(LogIn, "no_auth");
+export default withAuthorization(LogIn, "shouldNotBeNoOne");
