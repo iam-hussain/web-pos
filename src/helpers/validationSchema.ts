@@ -12,11 +12,6 @@ const password = yup
   .min(6, "Password must be at least 6 characters")
   .required("New password is required");
 
-const validationSchema = yup.object({
-  email: yup.string().email("Not a valid email").required("Email is required"),
-  password: yup.string().trim().required("Password is required"),
-});
-
 export const loginValidation = {
   initialValues: {
     email: "",
@@ -27,6 +22,7 @@ export const loginValidation = {
     password,
   }),
 };
+
 export const registerValidation = {
   initialValues: {
     firstName: "",
