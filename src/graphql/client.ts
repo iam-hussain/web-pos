@@ -12,7 +12,7 @@ import {
 } from "@apollo/client";
 import { onError } from "@apollo/client/link/error";
 import { setContext } from "@apollo/client/link/context";
-import { HEADER_TOKEN_KEY } from "@helpers/constants";
+import { HEADER_TOKEN_KEY } from "@providers/constants";
 
 export const APOLLO_STATE_PROP_NAME = "__APOLLO_STATE__";
 

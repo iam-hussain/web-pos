@@ -17,7 +17,6 @@ function Input({
 
   const onChange = React.useCallback(
     (event: any) => {
-      console.log({ event });
       handleChange(event);
     },
     [handleChange]

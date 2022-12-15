@@ -20,9 +20,12 @@ import { USER_LOGIN } from "@graphql/mutation";
 import { setCookie } from "cookies-next";
 import _ from "lodash";
 import Input from "@components/atoms/input";
+import useToken from "@hooks/useToken";
+import withAuthorization from "@helpers/withAuthorization";
 
-function LogIn() {
+function LogIn({ reAuth }: any) {
   const router = useRouter();
+  const token = useToken();
   const [mutateFunction] = useMutation(USER_LOGIN);
 
   type Values = {
@@ -48,12 +51,12 @@ function LogIn() {
     { setSubmitting, resetForm, setErrors }: any
   ) {
     try {
-      console.log({ values });
       const result = await mutateFunction({ variables: values });
-      const token = _.get(result, "data.userLogin");
+      const jwt = _.get(result, "data.userLogin");
 
-      if (token) {
-        setCookie("token", token);
+      if (jwt) {
+        token.setToken(jwt);
+        reAuth();
         router.push("/dashboard");
         resetForm();
       }
@@ -180,4 +183,4 @@ function LogIn() {
   );
 }
 
-export default LogIn;
+export default withAuthorization(LogIn, "no_auth");

@@ -1,3 +1,25 @@
+html,
+body {
+  padding: 0px;
+  margin: 0px;
+  height: 100%;
+  width: 100%;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  font-family: "Poppins", sans-serif;
+  line-height: 1;
+  overflow-x: hidden;
+  overflow-y: auto;
+  display: block;
+}
+#__next {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  display: block;
+}
+
 .svg-mid {
   width: 13rem;
   height: auto;

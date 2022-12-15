@@ -1,6 +1,7 @@
 import * as React from "react";
 import Head from "next/head";
 import { AppProps } from "next/app";
+import { Provider } from "react-redux";
 import { ApolloProvider } from "@apollo/client";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -8,7 +9,9 @@ import { CacheProvider, EmotionCache } from "@emotion/react";
 import { useApollo } from "src/graphql/client";
 import theme from "../styles/theme";
 import createEmotionCache from "../styles/createEmotionCache";
+import { store } from "src/providers/store";
 import "../styles/global.css";
+import TokenProvider from "@helpers/withTokenProvider";
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -26,13 +29,16 @@ export default function MyApp(props: MyAppProps) {
       <Head>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
-      <ApolloProvider client={apolloClient}>
-        <ThemeProvider theme={theme}>
-          {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-          <CssBaseline />
-          <Component {...pageProps} />
-        </ThemeProvider>
-      </ApolloProvider>
+      <Provider store={store}>
+        <ApolloProvider client={apolloClient}>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <TokenProvider>
+              <Component {...pageProps} />
+            </TokenProvider>
+          </ThemeProvider>
+        </ApolloProvider>
+      </Provider>
     </CacheProvider>
   );
 }

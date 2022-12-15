@@ -28,7 +28,11 @@
       "@components/templates/*": ["src/components/templates/*"],
       "@graphql/*": ["src/graphql/*"],
       "@styles/*": ["src/styles/*"],
-      "@helpers/*": ["src/helpers/*"]
+      "@helpers/*": ["src/helpers/*"],
+      "@store": ["src/providers/store.ts"],
+      "@reducers/*": ["src/reducers/*"],
+      "@providers/*": ["src/providers/*"],
+      "@hooks/*": ["src/hooks/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
