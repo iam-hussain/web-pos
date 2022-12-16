@@ -6,7 +6,7 @@ import AppRegistration from "@mui/icons-material/AppRegistration";
 import { useRouter } from "next/router";
 import { USER_REGISTER } from "@graphql/mutation";
 import { USER_DUPLICATE_CHECK } from "@graphql/query";
-import Island from "@components/templates/island";
+import IslandLayout from "@components/templates/island-layout";
 import Input from "@components/atoms/input";
 import _ from "lodash";
 import { registerValidation } from "@helpers/validationSchema";
@@ -18,7 +18,7 @@ import LoadingButton from "@mui/lab/LoadingButton";
 
 function Register() {
   const router = useRouter();
-  const token = useToken();
+  const { setToken } = useToken();
   const [loading, setLoading] = React.useState(false);
   const [mutateFunction] = useMutation(USER_REGISTER);
   const { refetch } = useQuery(USER_DUPLICATE_CHECK, {
@@ -50,7 +50,7 @@ function Register() {
         const result = await mutateFunction({ variables: values });
         const jwt = _.get(result, "data.userRegister");
         if (jwt) {
-          token.setToken(jwt);
+          setToken(jwt);
           router.push("/");
         } else {
           setSubmitting(false);
@@ -69,7 +69,7 @@ function Register() {
   }
 
   return (
-    <Island>
+    <IslandLayout>
       <Box
         display="flex"
         alignItems="center"
@@ -169,7 +169,7 @@ function Register() {
           />
         </Paper>
       </Box>
-    </Island>
+    </IslandLayout>
   );
 }
 

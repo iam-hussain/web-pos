@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { Box, Paper, Typography } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Login from "@mui/icons-material/Login";
-import Island from "@components/templates/island";
+import IslandLayout from "@components/templates/island-layout";
 import { USER_LOGIN } from "@graphql/mutation";
 import _ from "lodash";
 import Input from "@components/atoms/input";
@@ -17,7 +17,7 @@ import AuthOption from "@components/molecules/auth-option";
 
 function LogIn() {
   const router = useRouter();
-  const token = useToken();
+  const { setToken } = useToken();
   const [loading, setLoading] = React.useState(false);
   const [mutateFunction] = useMutation(USER_LOGIN);
 
@@ -30,7 +30,7 @@ function LogIn() {
       const result = await mutateFunction({ variables: values });
       const jwt = _.get(result, "data.userLogin");
       if (jwt) {
-        token.setToken(jwt);
+        setToken(jwt);
         router.push("/");
       } else {
         setSubmitting(false);
@@ -50,7 +50,7 @@ function LogIn() {
   }
 
   return (
-    <Island>
+    <IslandLayout>
       <Box
         display="flex"
         alignItems="center"
@@ -133,7 +133,7 @@ function LogIn() {
           />
         </Paper>
       </Box>
-    </Island>
+    </IslandLayout>
   );
 }
 

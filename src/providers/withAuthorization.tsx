@@ -1,9 +1,11 @@
 import { initializeApollo } from "@graphql/client";
 import { AUTHENTICATE } from "@graphql/query";
 import { HEADER_TOKEN_KEY } from "@providers/constants";
+import { authUpdate } from "@reducers/authenticateSlice";
 import { getCookie } from "cookies-next";
 import Router from "next/router";
 import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 
 export default function withAuthorization(
   Component: JSX.Element | any,
@@ -14,9 +16,10 @@ export default function withAuthorization(
     | "shouldBePOSEmployee"
     | "shouldNotBeAnyOne"
 ) {
-  const AuthWrapper = ({ ...props }) => {
+  const AuthWrapper = (props: any) => {
+    const dispatch = useDispatch();
+    const { authenticate } = props;
     const handleStorageEvent = (event: any) => {
-      console.log({ event });
       if (
         ["shouldBeUser", "shouldBePOS", "shouldBePOSEmployee"].includes(
           authorizedFor
@@ -35,6 +38,12 @@ export default function withAuthorization(
         window.removeEventListener("storage", handleStorageEvent);
       };
     }, []);
+
+    useEffect(() => {
+      if (authenticate) {
+        dispatch(authUpdate(authenticate));
+      }
+    }, [dispatch, authenticate]);
 
     return <Component {...props} />;
   };
@@ -72,15 +81,17 @@ export default function withAuthorization(
     }
 
     const authData = fetchData?.data?.authenticate || undefined;
-    const authenticated = !!authData;
-    const { hasUser, hasShop, isPOS } = authData || {};
+    const isAuthenticated = !!authData;
+    const { hasUser, hasShop, isPOS, user, shop } = authData || {};
     const authenticate = {
       token,
-      authenticated,
+      isAuthenticated,
       ...authData,
-      hasUser: hasUser || false,
-      hasShop: hasShop || false,
-      isPOS: isPOS || false,
+      hasUser: (isAuthenticated && hasUser && user) || false,
+      hasShop: (isAuthenticated && hasShop && shop) || false,
+      isPOS: (isAuthenticated && isPOS && shop) || false,
+      isPOSEmp: (isAuthenticated && user && isPOS && shop) || false,
+      isUser: (isAuthenticated && user && !isPOS) || false,
     };
 
     if (authorizedFor === "shouldBeUser" && !authenticate.hasUser) {
@@ -104,11 +115,8 @@ export default function withAuthorization(
 
     return {
       ...componentProps,
-      props: {
-        ...(componentProps?.props || {}),
-        initialApolloState: apolloClient.cache.extract(),
-        authenticate,
-      },
+      initialApolloState: apolloClient.cache.extract(),
+      authenticate,
     };
   };
   return AuthWrapper;

@@ -3,24 +3,27 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 
 const initialState: any = {
   token: "",
-  hasTokenDataL: false,
+  hasTokenData: false,
+  isAuthenticated: false,
   hasShop: false,
   hasUser: false,
   isPOS: false,
-  user: {} as any,
-  shop: {} as any,
+  isPOSEmp: false,
+  isUser: false,
+  user: null,
+  shop: null,
   shopIds: [],
 };
 
 export const Slice = createSlice({
-  name: "auth",
+  name: "authenticate",
   initialState,
   reducers: {
     authUpdate: (state, action: PayloadAction<any>) => {
-      state = { ...action.payload };
+      return { ...state, ...action.payload };
     },
-    authReset: (state) => {
-      state = { ...initialState };
+    authReset: () => {
+      return { ...initialState };
     },
   },
 });

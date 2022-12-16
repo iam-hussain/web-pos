@@ -2,7 +2,7 @@ import React from "react";
 import Grid from "@mui/material/Grid";
 import { BrandCleanSvg } from "@components/atoms/svg";
 
-function Island({ children }: any) {
+function IslandLayout({ children }: any) {
   return (
     <Grid
       container
@@ -36,4 +36,4 @@ function Island({ children }: any) {
   );
 }
 
-export default Island;
+export default IslandLayout;
