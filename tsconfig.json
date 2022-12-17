@@ -32,7 +32,8 @@
       "@store": ["src/providers/store.ts"],
       "@reducers/*": ["src/reducers/*"],
       "@providers/*": ["src/providers/*"],
-      "@hooks/*": ["src/hooks/*"]
+      "@hooks/*": ["src/hooks/*"],
+      "@transformers/*": ["src/transformers/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

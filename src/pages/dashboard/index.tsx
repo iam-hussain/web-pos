@@ -4,8 +4,13 @@ import withAuthorization from "@providers/withAuthorization";
 import GenericLayout from "@components/templates/generic-layout";
 
 import Table from "@components/atoms/table";
-// GET_SHOP_FOR_TABLE;
-function Dashboard() {
+import { transformTableShop } from "@transformers/shop";
+import { initializeApollo } from "@graphql/client";
+import { GET_SHOP_FOR_TABLE } from "@graphql/query";
+import { HEADER_TOKEN_KEY } from "@providers/constants";
+import { getCookie } from "cookies-next";
+
+function Dashboard({ tableShop }: any) {
   return (
     <GenericLayout container>
       <Box
@@ -42,36 +47,7 @@ function Dashboard() {
           showCredActions
           shouldSingleSelect
           shouldShowToolBar={false}
-          header={[
-            {
-              id: 1,
-              label: "ID",
-              key: "id",
-              disablePadding: false,
-              numeric: true,
-              sortable: true,
-            },
-            {
-              id: 2,
-              label: "Name",
-              key: "name",
-              disablePadding: false,
-              numeric: false,
-              sortable: true,
-            },
-            {
-              id: 3,
-              label: "Date",
-              key: "date",
-              disablePadding: false,
-              numeric: false,
-              sortable: false,
-            },
-          ]}
-          items={[
-            ["1", "New", "12:22/23"],
-            ["2", "New", "12:22/23"],
-          ]}
+          {...tableShop}
         />
       </Box>
     </GenericLayout>
@@ -79,7 +55,21 @@ function Dashboard() {
 }
 
 Dashboard.getInitialProps = async (ctx: any) => {
-  console.log({ ctx });
+  const token = getCookie(HEADER_TOKEN_KEY, ctx);
+  const apolloClient = initializeApollo();
+  const fetchData = await apolloClient.query({
+    query: GET_SHOP_FOR_TABLE,
+    context: {
+      headers: {
+        [HEADER_TOKEN_KEY]: token,
+      },
+    },
+  });
+  const shops = fetchData?.data?.getShops || undefined;
+  return {
+    shops,
+    tableShop: transformTableShop(shops),
+  };
 };
 
 export default withAuthorization(Dashboard, "shouldBeUser");

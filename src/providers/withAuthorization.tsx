@@ -117,7 +117,7 @@ export default function withAuthorization(
       ...componentProps,
       initialApolloState: apolloClient.cache.extract(),
       authenticate,
-      apolloClient,
+      initializeApollo,
     };
   };
   return AuthWrapper;

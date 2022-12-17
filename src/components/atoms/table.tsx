@@ -194,129 +194,139 @@ function EnhancedTable(props: any) {
         {shouldShowToolBar && (
           <TableToolBar {...props} selectedLength={selectedLength} />
         )}
-        {items.length > 0 ? (
-          <>
-            <TableContainer>
-              <Table
-                stickyHeader
-                sx={{ minWidth: 750 }}
-                aria-labelledby="tableTitle"
-                size={"medium"}
-              >
-                <TableHead>
-                  <TableRow>
-                    {!disableSelectCheckBox && (
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          color="primary"
-                          indeterminate={
-                            selectedLength > 0 && selectedLength < itemsLength
-                          }
-                          checked={
-                            itemsLength > 0 && selectedLength === itemsLength
-                          }
-                          onChange={handleSelectAllClick}
-                          inputProps={{
-                            "aria-label": "select all",
-                          }}
-                          disabled={disableSelectAllCheckBox}
-                        />
-                      </TableCell>
-                    )}
+        <>
+          <TableContainer>
+            <Table
+              stickyHeader
+              sx={{ minWidth: 750 }}
+              aria-labelledby="tableTitle"
+              size={"medium"}
+            >
+              <TableHead>
+                <TableRow>
+                  {!disableSelectCheckBox && (
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        color="primary"
+                        indeterminate={
+                          selectedLength > 0 && selectedLength < itemsLength
+                        }
+                        checked={
+                          itemsLength > 0 && selectedLength === itemsLength
+                        }
+                        onChange={handleSelectAllClick}
+                        inputProps={{
+                          "aria-label": "select all",
+                        }}
+                        disabled={disableSelectAllCheckBox}
+                      />
+                    </TableCell>
+                  )}
 
-                    {header.map((headCell: any, index: number) => (
-                      <TableCell
-                        key={headCell.id}
-                        align={headCell.numeric ? "right" : "left"}
-                        padding={headCell.disablePadding ? "none" : "normal"}
-                        sortDirection={orderBy === headCell.key ? order : false}
+                  {header.map((headCell: any, index: number) => (
+                    <TableCell
+                      key={headCell.id}
+                      align={headCell.numeric ? "right" : "left"}
+                      padding={headCell.disablePadding ? "none" : "normal"}
+                      sortDirection={orderBy === headCell.key ? order : false}
+                      sx={{
+                        userSelect: "none",
+                      }}
+                    >
+                      {headCell.sortable ? (
+                        <TableSortLabel
+                          active={orderBy === headCell.key}
+                          direction={orderBy === headCell.key ? order : "asc"}
+                          onClick={() => handleSortClick(headCell.key)}
+                        >
+                          {headCell.label}
+                          {orderBy === headCell.key ? (
+                            <Box component="span" sx={visuallyHidden}>
+                              {order === "desc"
+                                ? "sorted descending"
+                                : "sorted ascending"}
+                            </Box>
+                          ) : null}
+                        </TableSortLabel>
+                      ) : (
+                        <>{headCell.label}</>
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {items.length > 0 ? (
+                  <>
+                    {items.map((column: any, i: number) => (
+                      <TableRow
+                        key={i}
+                        onClick={() => handleRowClick(column[0])}
+                        aria-checked={isSelected(column[0])}
+                        role="checkbox"
                         sx={{
-                          userSelect: "none",
+                          "&:last-child td, &:last-child th": { border: 0 },
                         }}
                       >
-                        {headCell.sortable ? (
-                          <TableSortLabel
-                            active={orderBy === headCell.key}
-                            direction={orderBy === headCell.key ? order : "asc"}
-                            onClick={() => handleSortClick(headCell.key)}
-                          >
-                            {headCell.label}
-                            {orderBy === headCell.key ? (
-                              <Box component="span" sx={visuallyHidden}>
-                                {order === "desc"
-                                  ? "sorted descending"
-                                  : "sorted ascending"}
-                              </Box>
-                            ) : null}
-                          </TableSortLabel>
-                        ) : (
-                          <>{headCell.label}</>
+                        {!disableSelectCheckBox && (
+                          <TableCell padding="checkbox">
+                            <Checkbox
+                              color="primary"
+                              checked={isSelected(column[0])}
+                              inputProps={{
+                                "aria-labelledby": `enhanced-table-checkbox-${i}`,
+                              }}
+                            />
+                          </TableCell>
                         )}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {items.map((column: any, i: number) => (
-                    <TableRow
-                      key={i}
-                      onClick={() => handleRowClick(column[0])}
-                      aria-checked={isSelected(column[0])}
-                      role="checkbox"
-                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                    >
-                      {!disableSelectCheckBox && (
-                        <TableCell padding="checkbox">
-                          <Checkbox
-                            color="primary"
-                            checked={isSelected(column[0])}
-                            inputProps={{
-                              "aria-labelledby": `enhanced-table-checkbox-${i}`,
-                            }}
+                        {column.map((row: any, j: number) => (
+                          <TableCell
+                            component="th"
+                            scope="row"
+                            align={header[j].numeric ? "right" : "left"}
+                            padding={
+                              header[j].disablePadding ? "none" : "normal"
+                            }
+                            key={j}
+                            {...(i == 0
+                              ? { id: `enhanced-table-checkbox-${i}` }
+                              : {})}
+                            dangerouslySetInnerHTML={{ __html: row }}
                           />
-                        </TableCell>
-                      )}
-                      {column.map((row: any, j: number) => (
-                        <TableCell
-                          component="th"
-                          scope="row"
-                          align={header[j].numeric ? "right" : "left"}
-                          padding={header[j].disablePadding ? "none" : "normal"}
-                          key={j}
-                          {...(i == 0
-                            ? { id: `enhanced-table-checkbox-${i}` }
-                            : {})}
-                          dangerouslySetInnerHTML={{ __html: row }}
-                        />
-                      ))}
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-            {showPagination && (
-              <TablePagination
-                rowsPerPageOptions={rowsPerPageOptions}
-                component="div"
-                count={pageCount}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onPageChange={handlePageChange}
-                onRowsPerPageChange={handleRowsPerPageChange}
-              />
-            )}
-          </>
-        ) : (
-          <Typography
-            variant="body2"
-            sx={{
-              textAlign: "center",
-              paddingBottom: 4,
-            }}
-          >
-            {noItemsFound}
-          </Typography>
-        )}
+                        ))}
+                      </TableRow>
+                    ))}
+                  </>
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={header.length}>
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          textAlign: "center",
+                          padding: 4,
+                        }}
+                      >
+                        {noItemsFound}
+                      </Typography>
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          {showPagination && (
+            <TablePagination
+              rowsPerPageOptions={rowsPerPageOptions}
+              component="div"
+              count={pageCount}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handlePageChange}
+              onRowsPerPageChange={handleRowsPerPageChange}
+            />
+          )}
+        </>
       </Paper>
     </Box>
   );
