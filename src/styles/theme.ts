@@ -33,7 +33,7 @@ export const themeConfig: any = {
   palette: {
     // mode: "dark",
     primary: {
-      main: "#534fff",
+      main: "#FF530D",
       // contrastText: "#fff",
     },
     secondary: {
@@ -45,14 +45,13 @@ export const themeConfig: any = {
     border: {
       main: grey[100],
     },
-    info: {
-      main: "#ccf888",
-    },
     neutral: {
-      main: "#c1bffd",
+      main: "#BDD4DE",
+    },
+    tertiary: {
+      main: "#3F5765",
     },
     background: {
-      default: "#efefef",
       // paper: "#fff",
     },
   },
@@ -94,11 +93,13 @@ const theme = createTheme({ ...themeConfig });
 declare module "@mui/material/styles" {
   interface Palette {
     neutral: Palette["primary"];
+    tertiary: Palette["primary"];
   }
 
   // allow configuration using `createTheme`
   interface PaletteOptions {
     neutral?: PaletteOptions["primary"];
+    tertiary?: PaletteOptions["primary"];
   }
 }
 
@@ -106,12 +107,14 @@ declare module "@mui/material/styles" {
 declare module "@mui/material/Button" {
   interface ButtonPropsColorOverrides {
     neutral: true;
+    tertiary: true;
   }
 }
 
 declare module "@mui/material/Typography" {
   interface TypographyPropsColorOverrides {
     neutral: true;
+    tertiary: true;
   }
 }
 

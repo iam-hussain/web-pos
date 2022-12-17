@@ -27,6 +27,9 @@ function GenericLayout({
             height: "100%",
             padding: noPadding ? 0 : 3,
             flexGrow: 1,
+            display: "flex",
+            flexDirection: "column",
+            gap: 3,
           }}
         >
           {children}
@@ -38,6 +41,9 @@ function GenericLayout({
             height: "100%",
             padding: noPadding ? 0 : 3,
             flexGrow: 1,
+            display: "flex",
+            flexDirection: "column",
+            gap: 3,
           }}
         >
           {children}

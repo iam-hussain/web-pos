@@ -46,3 +46,16 @@ export const AUTHENTICATE = gql`
     }
   }
 `;
+
+export const GET_SHOP_FOR_TABLE = gql`
+  query GetShop {
+    getShops {
+      id
+      name
+      slug
+      salaryDate
+      updatedAt
+      createdAt
+    }
+  }
+`;

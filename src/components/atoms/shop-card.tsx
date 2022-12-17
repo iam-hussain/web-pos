@@ -2,13 +2,14 @@ import * as React from "react";
 import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import { Box, Card, CardMedia, CardContent, Button } from "@mui/material";
+import Table from "./table";
 
 function ShopCard({ hed, dek, imageAlt }: any) {
   const theme = useTheme();
 
   return (
     <Card
-      sx={{ display: "flex", maxWidth: "400px", width: "fit-content" }}
+      sx={{ display: "flex", width: "100%", flexGrow: 1 }}
       variant="outlined"
     >
       <Box sx={{ display: "flex", flexDirection: "column" }}>
@@ -61,12 +62,12 @@ function ShopCard({ hed, dek, imageAlt }: any) {
           </Button>
         </Box>
       </Box>
-      <CardMedia
+      {/* <CardMedia
         component="img"
         sx={{ width: 151 }}
         image="/open-shop.jpg"
         alt={imageAlt || hed}
-      />
+      /> */}
     </Card>
   );
 }
