@@ -3,7 +3,7 @@ import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@store";
 import { closeAlert } from "@reducers/alertSlice";
 
@@ -15,6 +15,7 @@ const AlertComp = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 });
 
 function Alert() {
+  const dispatch = useDispatch();
   const { open, severity, message } = useSelector(
     (state: RootState) => state.alert
   );
@@ -26,7 +27,7 @@ function Alert() {
     if (reason === "clickaway") {
       return;
     }
-    closeAlert();
+    dispatch(closeAlert());
   };
 
   return (

@@ -151,7 +151,8 @@ function TableToolBar({
 
 function EnhancedTable(props: any) {
   const {
-    // selected, setSelected,
+    selected,
+    setSelected,
     items,
     header,
     rowsPerPage,
@@ -167,7 +168,6 @@ function EnhancedTable(props: any) {
     noItemsFound,
     shouldSingleSelect,
   } = props;
-  const [selected, setSelected] = React.useState<readonly string[]>([]);
 
   const selectedItems = React.useMemo(() => {
     return items.filter((item: any) => selected.includes(item.id));
@@ -185,7 +185,7 @@ function EnhancedTable(props: any) {
       if (shouldSingleSelect) {
         setSelected([]);
       } else {
-        setSelected([...selected.filter((each) => each !== id)]);
+        setSelected([...selected.filter((each: any) => each !== id)]);
       }
     } else {
       if (shouldSingleSelect) {
@@ -378,8 +378,12 @@ EnhancedTable.propTypes = {
   pageCount: PropTypes.number,
   rowsPerPage: PropTypes.number,
   rowsPerPageOptions: PropTypes.array,
+  selected: PropTypes.array,
+  setSelected: PropTypes.func,
   shouldShowToolBar: PropTypes.bool,
+  shouldSingleSelect: PropTypes.bool,
   showCredActions: PropTypes.bool,
+  showIconButton: PropTypes.bool,
   showPagination: PropTypes.bool,
 };
 
@@ -406,6 +410,8 @@ EnhancedTable.defaultProps = {
   handleDeleteActionClick: () => {},
   showIconButton: false,
   shouldSingleSelect: false,
+  selected: [],
+  setSelected: () => {},
 };
 
 export default EnhancedTable;

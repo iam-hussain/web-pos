@@ -38,7 +38,11 @@ function CategoryForm({ onSuccess, btnText, shopId, id, title }: any) {
         catId = _.get(result, "data.categoryCreate.id");
       }
       if (catId) {
-        onSuccess();
+        if (id) {
+          onSuccess("update");
+        } else {
+          onSuccess("create");
+        }
         setSubmitting(false);
         setLoading(false);
       } else {

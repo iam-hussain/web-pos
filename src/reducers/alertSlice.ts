@@ -31,8 +31,17 @@ export const Slice = createSlice({
         message: getMessage(action.payload.message),
       };
     },
-    closeAlert: () => {
-      return { ...initialState };
+    closeAlert: (state) => {
+      return {
+        ...state,
+        open: false,
+      };
+    },
+    resetAlert: (state) => {
+      return {
+        ...state,
+        ...initialState,
+      };
     },
   },
 });

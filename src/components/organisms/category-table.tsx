@@ -12,8 +12,9 @@ import { openAlert } from "@reducers/alertSlice";
 
 function CategoryTable({ shopId }: any) {
   const dispatch = useDispatch();
+  const [selected, setSelected] = React.useState<[]>([]);
   const [open, setOpen] = React.useState(false);
-  const [updateData, setUpdateData] = React.useState({});
+  const [updateData, setUpdateData] = React.useState<any>({});
 
   const [deleteCategory] = useMutation(CATEGORY_DELETE);
   const { data, refetch } = useQuery(GET_CATEGORY, {
@@ -22,9 +23,26 @@ function CategoryTable({ shopId }: any) {
     },
   });
 
-  const handleCategoryChange = () => {
+  const handleCategoryChange = (input: string) => {
     setOpen(false);
+    setSelected([]);
     refetch();
+    console.log({ input });
+    if (input === "create") {
+      dispatch(
+        openAlert({
+          severity: "success",
+          message: "CATEGORY_CREATED",
+        })
+      );
+    } else {
+      dispatch(
+        openAlert({
+          severity: "success",
+          message: "CATEGORY_UPDATE",
+        })
+      );
+    }
   };
 
   const handleEditCategoryClick = (_: any, selectedItems: any) => {
@@ -46,6 +64,7 @@ function CategoryTable({ shopId }: any) {
           },
         });
         if (data?.categoryDelete) {
+          setSelected([]);
           refetch();
           dispatch(
             openAlert({
@@ -77,6 +96,8 @@ function CategoryTable({ shopId }: any) {
         handleEditActionClick={handleEditCategoryClick}
         handleDeleteActionClick={handleDeleteCategoryClick}
         {...transformTableCategory(data?.getCategories || [])}
+        selected={selected}
+        setSelected={setSelected}
       />
       <Modal open={open} handleClose={() => setOpen(false)}>
         <Typography
@@ -90,8 +111,8 @@ function CategoryTable({ shopId }: any) {
           Create Category
         </Typography>
         <CategoryForm
-          onSuccess={() => handleCategoryChange()}
-          btnText={"Create"}
+          onSuccess={(data: string) => handleCategoryChange(data)}
+          btnText={updateData?.id ? "update" : "Create"}
           shopId={shopId}
           {...updateData}
         />
