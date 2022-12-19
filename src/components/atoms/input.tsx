@@ -28,7 +28,6 @@ function Input({
   const currentValue = React.useMemo(() => newValue, [newValue]);
 
   useEffect(() => {
-    console.log({ setValue });
     if (setValue || setValue === "") {
       setValues({
         [name]: setValue,

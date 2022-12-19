@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
-import PropTypes from "prop-types";
-import { Box, Button, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { useQuery, useMutation } from "@apollo/client";
 import { GET_CATEGORY } from "@graphql/query";
 import { CATEGORY_DELETE } from "@graphql/mutation";
@@ -8,8 +7,11 @@ import Table from "@components/atoms/table";
 import { transformTableCategory } from "@transformers/category";
 import Modal from "@components/atoms/modal";
 import CategoryForm from "./category-form";
+import { useDispatch } from "react-redux";
+import { openAlert } from "@reducers/alertSlice";
 
 function CategoryTable({ shopId }: any) {
+  const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
   const [updateData, setUpdateData] = React.useState({});
 
@@ -45,6 +47,12 @@ function CategoryTable({ shopId }: any) {
         });
         if (data?.categoryDelete) {
           refetch();
+          dispatch(
+            openAlert({
+              severity: "success",
+              message: "CATEGORY_DELETED",
+            })
+          );
         }
       } catch (error) {
         console.error(error);

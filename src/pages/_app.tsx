@@ -11,6 +11,7 @@ import theme from "../styles/theme";
 import createEmotionCache from "../styles/createEmotionCache";
 import { store } from "src/providers/store";
 import "../styles/global.css";
+import Alert from "@components/atoms/alert";
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -32,6 +33,7 @@ export default function MyApp(props: MyAppProps) {
         <ApolloProvider client={apolloClient}>
           <ThemeProvider theme={theme}>
             <CssBaseline />
+            <Alert />
             <Component {...pageProps} />
           </ThemeProvider>
         </ApolloProvider>

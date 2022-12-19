@@ -1,7 +1,3 @@
-import React from "react";
-import { useRouter } from "next/router";
-import { Button, Box } from "@mui/material";
-
 export const transformTableCategory = (data: any) => {
   const header = [
     {
@@ -21,11 +17,10 @@ export const transformTableCategory = (data: any) => {
       sortable: false,
     },
   ];
-  const items = data.map(({ id, title, updatedAt, createdAt }: any) => ({
+  const items = data.map(({ id, title }: any) => ({
     id,
     title,
   }));
-  console.log({ items, header, data });
   return {
     items,
     header,

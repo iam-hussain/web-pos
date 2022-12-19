@@ -151,6 +151,7 @@ function TableToolBar({
 
 function EnhancedTable(props: any) {
   const {
+    // selected, setSelected,
     items,
     header,
     rowsPerPage,

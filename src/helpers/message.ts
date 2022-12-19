@@ -13,6 +13,6 @@ export const message: Message = {
 type MessageKeys = keyof typeof message;
 type MessageValues = typeof message[MessageKeys];
 
-export function getMessage(key: MessageKeys): MessageValues {
-  return message[key] ?? message["INVALID_ENTRY"];
+export function getMessage(key: string): MessageValues | string {
+  return message[key] ? message["INVALID_ENTRY"] : key;
 }

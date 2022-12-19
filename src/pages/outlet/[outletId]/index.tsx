@@ -76,7 +76,6 @@ OneOutlet.getInitialProps = async (ctx: any) => {
       shopId: Number(outletId),
     },
   });
-  console.log({ fetchData });
   const shop = fetchData?.data?.getShop || {};
   if (!shop.id) {
     pushRouter(ctx, "/outlet");
