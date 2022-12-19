@@ -10,7 +10,7 @@ import { GET_SHOPS_MINI } from "@graphql/query";
 import { HEADER_TOKEN_KEY } from "@providers/constants";
 import { getCookie } from "cookies-next";
 
-function Dashboard({ shops }: any) {
+function Outlet({ shops }: any) {
   return (
     <GenericLayout container>
       <Box
@@ -29,7 +29,7 @@ function Dashboard({ shops }: any) {
             fontWeight: 500,
           }}
         >
-          Dashboard
+          Outlet / Branch
         </Typography>
       </Box>
       <Box
@@ -54,7 +54,7 @@ function Dashboard({ shops }: any) {
   );
 }
 
-Dashboard.getInitialProps = async (ctx: any) => {
+Outlet.getInitialProps = async (ctx: any) => {
   const token = getCookie(HEADER_TOKEN_KEY, ctx);
   const apolloClient = initializeApollo();
   const fetchData = await apolloClient.query({
@@ -71,4 +71,4 @@ Dashboard.getInitialProps = async (ctx: any) => {
   };
 };
 
-export default withAuthorization(Dashboard, "shouldBeUser");
+export default withAuthorization(Outlet, "shouldBeUser");

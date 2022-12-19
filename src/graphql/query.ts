@@ -47,13 +47,44 @@ export const AUTHENTICATE = gql`
   }
 `;
 
-export const GET_SHOP_FOR_TABLE = gql`
-  query GetShop {
+export const GET_SHOPS_MINI = gql`
+  query GetShops {
     getShops {
       id
       name
       slug
+      updatedAt
+      createdAt
+    }
+  }
+`;
+
+export const GET_SHOP = gql`
+  query GetShop($shopId: Int!) {
+    getShop(shopId: $shopId) {
+      id
+      name
+      slug
+      slogan
+      logo
+      mobileNumber
+      landlineNumber
+      address
+      county
+      state
+      zipCode
       salaryDate
+      updatedAt
+      createdAt
+    }
+  }
+`;
+
+export const GET_CATEGORY = gql`
+  query GetCategories($shopId: Int!) {
+    getCategories(shopId: $shopId) {
+      id
+      title
       updatedAt
       createdAt
     }

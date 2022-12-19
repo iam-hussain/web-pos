@@ -61,3 +61,15 @@ export const registerValidation = {
       ),
   }),
 };
+
+export const categoryValidation = {
+  initialValues: {
+    title: "",
+  },
+  validationSchema: yup.object({
+    title: yup
+      .string()
+      .required("This field is Required")
+      .min(2, "Title must be at least 2 characters"),
+  }),
+};

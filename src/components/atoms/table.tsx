@@ -23,7 +23,9 @@ import { DeleteForever, AddBoxRounded, Edit } from "@mui/icons-material";
 import { visuallyHidden } from "@mui/utils";
 
 function TableToolBar({
+  selected,
   selectedLength,
+  selectedItems,
   hed,
   disableDeleteAction,
   showCredActions,
@@ -67,12 +69,20 @@ function TableToolBar({
       {showCredActions && (
         <>
           {selectedLength > 0 ? (
-            <>
+            <Box
+              display="flex"
+              flexDirection="row"
+              alignItems="center"
+              justifyContent="center"
+              gap={2}
+            >
               <Tooltip title="Update">
                 {showIconButton ? (
                   <IconButton
                     color={"secondary"}
-                    onClick={handleEditActionClick}
+                    onClick={(event) =>
+                      handleEditActionClick(event, selectedItems)
+                    }
                   >
                     <Edit />
                   </IconButton>
@@ -81,7 +91,9 @@ function TableToolBar({
                     variant="outlined"
                     color={"primary"}
                     endIcon={<Edit />}
-                    onClick={handleEditActionClick}
+                    onClick={(event) =>
+                      handleEditActionClick(event, selectedItems)
+                    }
                   >
                     Update
                   </Button>
@@ -92,7 +104,9 @@ function TableToolBar({
                   {showIconButton ? (
                     <IconButton
                       color={"secondary"}
-                      onClick={handleDeleteActionClick}
+                      onClick={(event) =>
+                        handleDeleteActionClick(event, selectedItems)
+                      }
                     >
                       <DeleteForever />
                     </IconButton>
@@ -101,14 +115,16 @@ function TableToolBar({
                       variant="outlined"
                       color={"primary"}
                       endIcon={<DeleteForever />}
-                      onClick={handleDeleteActionClick}
+                      onClick={(event) =>
+                        handleDeleteActionClick(event, selectedItems)
+                      }
                     >
                       Delete
                     </Button>
                   )}
                 </Tooltip>
               )}
-            </>
+            </Box>
           ) : (
             <Tooltip title="Create">
               {showIconButton ? (
@@ -152,6 +168,10 @@ function EnhancedTable(props: any) {
   } = props;
   const [selected, setSelected] = React.useState<readonly string[]>([]);
 
+  const selectedItems = React.useMemo(() => {
+    return items.filter((item: any) => selected.includes(item.id));
+  }, [items, selected]);
+
   const [orderBy, setOrderBy] = React.useState<any>("id");
   const [order, setOrder] = React.useState<"asc" | "desc">("asc");
 
@@ -192,7 +212,12 @@ function EnhancedTable(props: any) {
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }} variant="outlined">
         {shouldShowToolBar && (
-          <TableToolBar {...props} selectedLength={selectedLength} />
+          <TableToolBar
+            {...props}
+            selectedLength={selectedLength}
+            selected={selected}
+            selectedItems={selectedItems}
+          />
         )}
         <>
           <TableContainer>
@@ -225,7 +250,7 @@ function EnhancedTable(props: any) {
 
                   {header.map((headCell: any, index: number) => (
                     <TableCell
-                      key={headCell.id}
+                      key={headCell.id || index}
                       align={headCell.numeric ? "right" : "left"}
                       padding={headCell.disablePadding ? "none" : "normal"}
                       sortDirection={orderBy === headCell.key ? order : false}
@@ -260,9 +285,9 @@ function EnhancedTable(props: any) {
                   <>
                     {items.map((column: any, i: number) => (
                       <TableRow
-                        key={i}
-                        onClick={() => handleRowClick(column[0])}
-                        aria-checked={isSelected(column[0])}
+                        key={column.id || i}
+                        onClick={() => handleRowClick(column.id)}
+                        aria-checked={isSelected(column.id)}
                         role="checkbox"
                         sx={{
                           "&:last-child td, &:last-child th": { border: 0 },
@@ -272,14 +297,14 @@ function EnhancedTable(props: any) {
                           <TableCell padding="checkbox">
                             <Checkbox
                               color="primary"
-                              checked={isSelected(column[0])}
+                              checked={isSelected(column.id)}
                               inputProps={{
                                 "aria-labelledby": `enhanced-table-checkbox-${i}`,
                               }}
                             />
                           </TableCell>
                         )}
-                        {column.map((row: any, j: number) => (
+                        {Object.keys(column).map((row: any, j: number) => (
                           <TableCell
                             component="th"
                             scope="row"
@@ -291,8 +316,10 @@ function EnhancedTable(props: any) {
                             {...(i == 0
                               ? { id: `enhanced-table-checkbox-${i}` }
                               : {})}
-                            dangerouslySetInnerHTML={{ __html: row }}
-                          />
+                            // dangerouslySetInnerHTML={{ __html: row }}
+                          >
+                            {column[row]}
+                          </TableCell>
                         ))}
                       </TableRow>
                     ))}
@@ -365,7 +392,7 @@ EnhancedTable.defaultProps = {
   rowsPerPageOptions: [10, 15, 20],
   handlePageChange: () => {},
   handleRowsPerPageChange: () => {},
-  disableDeleteAction: true,
+  disableDeleteAction: false,
   shouldShowToolBar: true,
   showPagination: false,
   disableSelectCheckBox: false,

@@ -6,6 +6,7 @@ import { getCookie } from "cookies-next";
 import Router from "next/router";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { pushRouter } from "@helpers/serverSide";
 
 export default function withAuthorization(
   Component: JSX.Element | any,
@@ -49,17 +50,6 @@ export default function withAuthorization(
   };
 
   AuthWrapper.getInitialProps = async (ctx: any) => {
-    const pushRouter = (ctx: any, path: string) => {
-      if (ctx.req) {
-        ctx.res.writeHead(302, { Location: path });
-        ctx.res.end();
-        return null;
-      } else {
-        Router.push(path);
-        return null;
-      }
-    };
-
     const token = getCookie(HEADER_TOKEN_KEY, ctx);
 
     if (authorizedFor === "shouldNotBeNoOne" && token) {

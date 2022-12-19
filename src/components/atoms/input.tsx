@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { useFormikContext } from "formik";
 import { TextField, TextFieldProps } from "@mui/material";
@@ -10,9 +10,10 @@ function Input({
   label,
   variant = "outlined",
   autoComplete = "off",
+  setValue,
   ...props
-}: TextFieldProps) {
-  const { handleChange, handleBlur, values, errors, touched }: any =
+}: TextFieldProps | any) {
+  const { handleChange, handleBlur, values, errors, touched, setValues }: any =
     useFormikContext();
 
   const onChange = React.useCallback(
@@ -25,6 +26,15 @@ function Input({
   const newValue = values[name];
 
   const currentValue = React.useMemo(() => newValue, [newValue]);
+
+  useEffect(() => {
+    console.log({ setValue });
+    if (setValue || setValue === "") {
+      setValues({
+        [name]: setValue,
+      });
+    }
+  }, [name, setValue, setValues]);
 
   return (
     <TextField
@@ -43,9 +53,5 @@ function Input({
     />
   );
 }
-
-Input.propTypes = {
-  name: PropTypes.string.isRequired,
-};
 
 export default Input;

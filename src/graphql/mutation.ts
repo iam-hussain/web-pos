@@ -23,3 +23,25 @@ export const USER_LOGIN = gql`
     userLogin(email: $email, password: $password)
   }
 `;
+
+export const CATEGORY_CREATE = gql`
+  mutation CategoryCreate($shopId: Int!, $title: String!) {
+    categoryCreate(shopId: $shopId, title: $title) {
+      id
+    }
+  }
+`;
+
+export const CATEGORY_UPDATE = gql`
+  mutation CategoryUpdate($shopId: Int!, $id: Int!, $title: String!) {
+    categoryUpdate(shopId: $shopId, id: $id, title: $title) {
+      id
+    }
+  }
+`;
+
+export const CATEGORY_DELETE = gql`
+  mutation CategoryDelete($shopId: Int!, $id: Int!) {
+    categoryDelete(shopId: $shopId, id: $id)
+  }
+`;
