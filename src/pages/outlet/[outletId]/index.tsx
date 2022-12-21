@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Box, Typography } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import withAuthorization from "@providers/withAuthorization";
 import GenericLayout from "@components/templates/generic-layout";
 
@@ -9,6 +9,7 @@ import { GET_SHOP } from "@graphql/query";
 import { HEADER_TOKEN_KEY } from "@providers/constants";
 import { getCookie } from "cookies-next";
 import { pushRouter } from "@helpers/serverSide";
+import ProductTable from "@components/organisms/product-table";
 
 function OneOutlet({ shop }: any) {
   return (
@@ -42,18 +43,21 @@ function OneOutlet({ shop }: any) {
           </Typography>
         </div>
       </Box>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          flexWrap: "wrap",
-          gap: 2,
-          justifyContent: "start",
-          alignItems: "center",
-        }}
+      <Grid
+        container
+        spacing={2}
+        direction="row"
+        alignItems="start"
+        justifyContent="center"
+        sx={{ minHeight: "100vh", paddingTop: 4 }}
       >
-        <CategoryTable shopId={shop.id} />
-      </Box>
+        <Grid item xs={6} md={4}>
+          <CategoryTable shopId={shop.id} />
+        </Grid>
+        <Grid item xs={6} md={8}>
+          <ProductTable shopId={shop.id} />
+        </Grid>
+      </Grid>
     </GenericLayout>
   );
 }

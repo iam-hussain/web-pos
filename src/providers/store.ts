@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authenticateReducer from "@reducers/authenticateSlice";
 import alertReducer from "@reducers/alertSlice";
+import categoryReducer from "@reducers/categorySlice";
 
 export const store = configureStore({
   reducer: {
     authenticate: authenticateReducer,
     alert: alertReducer,
+    category: categoryReducer,
   },
 });
 

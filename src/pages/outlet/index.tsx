@@ -47,6 +47,7 @@ function Outlet({ shops }: any) {
           showCredActions
           shouldSingleSelect
           shouldShowToolBar={false}
+          name={"shops"}
           {...transformTableShop(shops)}
         />
       </Box>

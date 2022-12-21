@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { useMutation } from "@apollo/client";
 import { CATEGORY_CREATE, CATEGORY_UPDATE } from "@graphql/mutation";
-import Input from "@components/atoms/input";
+import InputFormik from "@components/atoms/input";
 import { categoryValidation } from "@helpers/validationSchema";
 import { Category } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
@@ -71,7 +71,7 @@ function CategoryForm({ onSuccess, btnText, shopId, id, title }: any) {
             justifyContent="center"
             gap={2}
           >
-            <Input
+            <InputFormik
               name="title"
               label="Title"
               {...(title ? { setValues: title } : {})}

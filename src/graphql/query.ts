@@ -90,3 +90,19 @@ export const GET_CATEGORY = gql`
     }
   }
 `;
+
+export const GET_PRODUCT = gql`
+  query GetProducts($shopId: Int!) {
+    getProducts(shopId: $shopId) {
+      id
+      title
+      price
+      category {
+        title
+        id
+      }
+      updatedAt
+      createdAt
+    }
+  }
+`;

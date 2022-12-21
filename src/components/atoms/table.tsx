@@ -23,7 +23,6 @@ import { DeleteForever, AddBoxRounded, Edit } from "@mui/icons-material";
 import { visuallyHidden } from "@mui/utils";
 
 function TableToolBar({
-  selected,
   selectedLength,
   selectedItems,
   hed,
@@ -89,7 +88,7 @@ function TableToolBar({
                 ) : (
                   <Button
                     variant="outlined"
-                    color={"primary"}
+                    color={"secondary"}
                     endIcon={<Edit />}
                     onClick={(event) =>
                       handleEditActionClick(event, selectedItems)
@@ -113,7 +112,7 @@ function TableToolBar({
                   ) : (
                     <Button
                       variant="outlined"
-                      color={"primary"}
+                      color={"secondary"}
                       endIcon={<DeleteForever />}
                       onClick={(event) =>
                         handleDeleteActionClick(event, selectedItems)
@@ -134,7 +133,7 @@ function TableToolBar({
               ) : (
                 <Button
                   variant="outlined"
-                  color={"primary"}
+                  color={"secondary"}
                   endIcon={<AddBoxRounded />}
                   onClick={handleAddActionClick}
                 >
@@ -151,6 +150,7 @@ function TableToolBar({
 
 function EnhancedTable(props: any) {
   const {
+    name,
     selected,
     setSelected,
     items,
@@ -167,6 +167,9 @@ function EnhancedTable(props: any) {
     disableSelectAllCheckBox,
     noItemsFound,
     shouldSingleSelect,
+    maxHeight,
+    tableSize,
+    loading,
   } = props;
 
   const selectedItems = React.useMemo(() => {
@@ -221,13 +224,8 @@ function EnhancedTable(props: any) {
           />
         )}
         <>
-          <TableContainer>
-            <Table
-              stickyHeader
-              sx={{ minWidth: 750 }}
-              aria-labelledby="tableTitle"
-              size={"medium"}
-            >
+          <TableContainer sx={{ maxHeight: maxHeight }}>
+            <Table stickyHeader aria-labelledby="tableTitle" size={tableSize}>
               <TableHead>
                 <TableRow>
                   {!disableSelectCheckBox && (
@@ -251,13 +249,14 @@ function EnhancedTable(props: any) {
 
                   {header.map((headCell: any, index: number) => (
                     <TableCell
-                      key={headCell.id || index}
+                      key={`${name}_hed_${headCell.id || index}`}
                       align={headCell.numeric ? "right" : "left"}
                       padding={headCell.disablePadding ? "none" : "normal"}
                       sortDirection={orderBy === headCell.key ? order : false}
                       sx={{
                         userSelect: "none",
                       }}
+                      width={headCell.width || "auto"}
                     >
                       {headCell.sortable ? (
                         <TableSortLabel
@@ -286,7 +285,7 @@ function EnhancedTable(props: any) {
                   <>
                     {items.map((column: any, i: number) => (
                       <TableRow
-                        key={column.id || i}
+                        key={`${name}_item_${i}`}
                         onClick={() => handleRowClick(column.id)}
                         aria-checked={isSelected(column.id)}
                         role="checkbox"
@@ -313,7 +312,7 @@ function EnhancedTable(props: any) {
                             padding={
                               header[j].disablePadding ? "none" : "normal"
                             }
-                            key={j}
+                            key={`${name}_check_${j}`}
                             {...(i == 0
                               ? { id: `enhanced-table-checkbox-${i}` }
                               : {})}
@@ -327,7 +326,7 @@ function EnhancedTable(props: any) {
                   </>
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={header.length}>
+                    <TableCell colSpan={header.length + 1}>
                       <Typography
                         variant="body2"
                         sx={{
@@ -335,7 +334,7 @@ function EnhancedTable(props: any) {
                           padding: 4,
                         }}
                       >
-                        {noItemsFound}
+                        {loading ? "Loading..." : noItemsFound}
                       </Typography>
                     </TableCell>
                   </TableRow>
@@ -385,6 +384,10 @@ EnhancedTable.propTypes = {
   showCredActions: PropTypes.bool,
   showIconButton: PropTypes.bool,
   showPagination: PropTypes.bool,
+  maxHeight: PropTypes.number,
+  loading: PropTypes.bool,
+  tableSize: PropTypes.oneOf(["small", "medium"]),
+  name: PropTypes.string,
 };
 
 EnhancedTable.defaultProps = {
@@ -412,6 +415,10 @@ EnhancedTable.defaultProps = {
   shouldSingleSelect: false,
   selected: [],
   setSelected: () => {},
+  maxHeight: 600,
+  loading: true,
+  tableSize: "medium",
+  name: "table",
 };
 
 export default EnhancedTable;

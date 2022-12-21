@@ -7,6 +7,7 @@ export const transformTableCategory = (data: any) => {
       disablePadding: false,
       numeric: true,
       sortable: false,
+      width: 20,
     },
     {
       id: 2,
@@ -25,4 +26,11 @@ export const transformTableCategory = (data: any) => {
     items,
     header,
   };
+};
+
+export const transformSelectCategory = (data: any) => {
+  return data.map(({ id, title }: any) => ({
+    value: id,
+    label: title,
+  }));
 };

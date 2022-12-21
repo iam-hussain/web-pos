@@ -4,30 +4,44 @@ import { useQuery, useMutation } from "@apollo/client";
 import { GET_CATEGORY } from "@graphql/query";
 import { CATEGORY_DELETE } from "@graphql/mutation";
 import Table from "@components/atoms/table";
-import { transformTableCategory } from "@transformers/category";
 import Modal from "@components/atoms/modal";
 import CategoryForm from "./category-form";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { openAlert } from "@reducers/alertSlice";
+import { setCategories, catchCategories } from "@reducers/categorySlice";
+import { AppDispatch, RootState } from "@store";
 
 function CategoryTable({ shopId }: any) {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
+  const { loading, tableCategories } = useSelector(
+    (state: RootState) => state.category
+  );
+
   const [selected, setSelected] = React.useState<[]>([]);
   const [open, setOpen] = React.useState(false);
   const [updateData, setUpdateData] = React.useState<any>({});
 
   const [deleteCategory] = useMutation(CATEGORY_DELETE);
-  const { data, refetch } = useQuery(GET_CATEGORY, {
+  const { data, refetch, error } = useQuery(GET_CATEGORY, {
     variables: {
       shopId,
     },
   });
 
+  useEffect(() => {
+    if (data?.getCategories) {
+      dispatch(setCategories(data?.getCategories));
+    }
+    if (error) {
+      console.error(error);
+      dispatch(catchCategories());
+    }
+  }, [data, dispatch, error, loading]);
+
   const handleCategoryChange = (input: string) => {
     setOpen(false);
     setSelected([]);
-    refetch();
-    console.log({ input });
+    if (refetch) refetch();
     if (input === "create") {
       dispatch(
         openAlert({
@@ -65,7 +79,7 @@ function CategoryTable({ shopId }: any) {
         });
         if (data?.categoryDelete) {
           setSelected([]);
-          refetch();
+          if (refetch) refetch();
           dispatch(
             openAlert({
               severity: "success",
@@ -95,9 +109,11 @@ function CategoryTable({ shopId }: any) {
         handleAddActionClick={() => setOpen(true)}
         handleEditActionClick={handleEditCategoryClick}
         handleDeleteActionClick={handleDeleteCategoryClick}
-        {...transformTableCategory(data?.getCategories || [])}
+        {...tableCategories}
         selected={selected}
         setSelected={setSelected}
+        loading={loading}
+        name={"category"}
       />
       <Modal open={open} handleClose={() => setOpen(false)}>
         <Typography
@@ -108,7 +124,7 @@ function CategoryTable({ shopId }: any) {
             pb: 3,
           }}
         >
-          Create Category
+          {updateData?.id ? "Update Category" : "Create Category"}
         </Typography>
         <CategoryForm
           onSuccess={(data: string) => handleCategoryChange(data)}

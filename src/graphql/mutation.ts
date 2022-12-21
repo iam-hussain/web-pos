@@ -45,3 +45,47 @@ export const CATEGORY_DELETE = gql`
     categoryDelete(shopId: $shopId, id: $id)
   }
 `;
+
+export const PRODUCT_CREATE = gql`
+  mutation ProductCreate(
+    $shopId: Int!
+    $title: String!
+    $price: Float!
+    $categoryId: Int!
+  ) {
+    productCreate(
+      shopId: $shopId
+      title: $title
+      price: $price
+      categoryId: $categoryId
+    ) {
+      id
+    }
+  }
+`;
+
+export const PRODUCT_UPDATE = gql`
+  mutation ProductUpdate(
+    $shopId: Int!
+    $id: Int!
+    $title: String!
+    $price: Float!
+    $categoryId: Int!
+  ) {
+    productUpdate(
+      shopId: $shopId
+      id: $id
+      title: $title
+      price: $price
+      categoryId: $categoryId
+    ) {
+      id
+    }
+  }
+`;
+
+export const PRODUCT_DELETE = gql`
+  mutation ProductDelete($shopId: Int!, $id: Int!) {
+    productDelete(shopId: $shopId, id: $id)
+  }
+`;

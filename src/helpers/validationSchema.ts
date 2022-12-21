@@ -73,3 +73,25 @@ export const categoryValidation = {
       .min(2, "Title must be at least 2 characters"),
   }),
 };
+
+export const productValidation = {
+  initialValues: {
+    title: "",
+    price: 0,
+    categoryId: 0,
+  },
+  validationSchema: yup.object({
+    title: yup
+      .string()
+      .required("This field is Required")
+      .min(2, "Title must be at least 2 characters"),
+    price: yup
+      .number()
+      .required("This field is Required")
+      .min(0.1, "The price can't be zero"),
+    categoryId: yup
+      .number()
+      .required("This field is Required")
+      .min(1, "Should select a valid category"),
+  }),
+};

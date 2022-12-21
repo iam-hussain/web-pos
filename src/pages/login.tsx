@@ -8,7 +8,7 @@ import Login from "@mui/icons-material/Login";
 import IslandLayout from "@components/templates/island-layout";
 import { USER_LOGIN } from "@graphql/mutation";
 import _ from "lodash";
-import Input from "@components/atoms/input";
+import InputFormik from "@components/atoms/input";
 import useToken from "@hooks/useToken";
 import withAuthorization from "@providers/withAuthorization";
 import { getMessage } from "@helpers/message";
@@ -100,8 +100,12 @@ function LogIn() {
                   justifyContent="center"
                   gap={2}
                 >
-                  <Input name="email" label="Email" autoComplete="email" />
-                  <Input
+                  <InputFormik
+                    name="email"
+                    label="Email"
+                    autoComplete="email"
+                  />
+                  <InputFormik
                     name="password"
                     label="Password"
                     type="password"

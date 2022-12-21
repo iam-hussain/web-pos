@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 import { USER_REGISTER } from "@graphql/mutation";
 import { USER_DUPLICATE_CHECK } from "@graphql/query";
 import IslandLayout from "@components/templates/island-layout";
-import Input from "@components/atoms/input";
+import InputFormik from "@components/atoms/input";
 import _ from "lodash";
 import { registerValidation } from "@helpers/validationSchema";
 import { getMessage } from "@helpers/message";
@@ -119,26 +119,34 @@ function Register() {
                   justifyContent="center"
                   gap={2}
                 >
-                  <Input
+                  <InputFormik
                     name="firstName"
                     label="First Name"
                     autoComplete="given-name"
                   />
-                  <Input
+                  <InputFormik
                     name="lastName"
                     label="Last Name"
                     autoComplete="given-name"
                   />
-                  <Input name="email" label="Email" autoComplete="email" />
-                  <Input name="mobileNumber" label="Phone" autoComplete="tel" />
-                  <Input
+                  <InputFormik
+                    name="email"
+                    label="Email"
+                    autoComplete="email"
+                  />
+                  <InputFormik
+                    name="mobileNumber"
+                    label="Phone"
+                    autoComplete="tel"
+                  />
+                  <InputFormik
                     name="password"
                     label="Password"
                     type="password"
                     autoComplete="new-password"
                   />
 
-                  <Input
+                  <InputFormik
                     name="confirmPassword"
                     label="Confirm Password"
                     type="password"
