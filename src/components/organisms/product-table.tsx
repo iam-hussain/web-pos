@@ -26,7 +26,7 @@ function ProductTable({ shopId }: any) {
 
   const handleAlertDispatch = (input: any) => dispatch(openAlert(input));
 
-  const handleCategoryChange = (input: string) => {
+  const handleEntryUpdate = (input: string) => {
     setOpen(false);
     refetch();
     if (input === "productCreate") {
@@ -42,7 +42,7 @@ function ProductTable({ shopId }: any) {
     }
   };
 
-  const handleEditCategory = (_: any, selectedItems: any) => {
+  const handleEditClick = (_: any, selectedItems: any) => {
     if (selectedItems.length > 0) {
       setUpdateData({
         ...selectedItems[0],
@@ -51,7 +51,7 @@ function ProductTable({ shopId }: any) {
     }
   };
 
-  const handleDeleteCategory = async (_: any, selectedItems: any) => {
+  const handleDeleteClick = async (_: any, selectedItems: any) => {
     if (selectedItems.length > 0) {
       try {
         const { data } = await deleteMutation({
@@ -90,8 +90,8 @@ function ProductTable({ shopId }: any) {
         showCredActions
         shouldSingleSelect
         handleAddActionClick={() => setOpen(true)}
-        handleEditActionClick={handleEditCategory}
-        handleDeleteActionClick={handleDeleteCategory}
+        handleEditActionClick={handleEditClick}
+        handleDeleteActionClick={handleDeleteClick}
         {...transformTableProduct(data?.getProducts || [])}
         selected={selected}
         setSelected={setSelected}
@@ -110,7 +110,7 @@ function ProductTable({ shopId }: any) {
           {updateData?.id ? "Update Product" : "Create Product"}
         </Typography>
         <ProductForm
-          onSuccess={(data: string) => handleCategoryChange(data)}
+          onSuccess={(data: string) => handleEntryUpdate(data)}
           btnText={updateData?.id ? "update" : "Create"}
           shopId={shopId}
           updateData={updateData}

@@ -21,12 +21,15 @@ function CategoryTable({ shopId }: any) {
   const [open, setOpen] = React.useState(false);
   const [updateData, setUpdateData] = React.useState<any>({});
 
-  const [deleteCategory] = useMutation(CATEGORY_DELETE);
+  const [deleteMutation] = useMutation(CATEGORY_DELETE);
+
   const { data, refetch, error } = useQuery(GET_CATEGORY, {
     variables: {
       shopId,
     },
   });
+
+  const handleAlertDispatch = (input: any) => dispatch(openAlert(input));
 
   useEffect(() => {
     if (data?.getCategories) {
@@ -38,28 +41,23 @@ function CategoryTable({ shopId }: any) {
     }
   }, [data, dispatch, error, loading]);
 
-  const handleCategoryChange = (input: string) => {
+  const handleEntryUpdate = (input: string) => {
     setOpen(false);
-    setSelected([]);
-    if (refetch) refetch();
+    refetch();
     if (input === "create") {
-      dispatch(
-        openAlert({
-          severity: "success",
-          message: "CATEGORY_CREATED",
-        })
-      );
+      handleAlertDispatch({
+        severity: "success",
+        message: "CATEGORY_CREATED",
+      });
     } else {
-      dispatch(
-        openAlert({
-          severity: "success",
-          message: "CATEGORY_UPDATE",
-        })
-      );
+      handleAlertDispatch({
+        severity: "success",
+        message: "CATEGORY_UPDATE",
+      });
     }
   };
 
-  const handleEditCategoryClick = (_: any, selectedItems: any) => {
+  const handleEditClick = (_: any, selectedItems: any) => {
     if (selectedItems.length > 0) {
       setUpdateData({
         ...selectedItems[0],
@@ -68,10 +66,10 @@ function CategoryTable({ shopId }: any) {
     }
   };
 
-  const handleDeleteCategoryClick = async (_: any, selectedItems: any) => {
+  const handleDeleteClick = async (_: any, selectedItems: any) => {
     if (selectedItems.length > 0) {
       try {
-        const { data } = await deleteCategory({
+        const { data } = await deleteMutation({
           variables: {
             id: selectedItems[0].id,
             shopId,
@@ -79,13 +77,11 @@ function CategoryTable({ shopId }: any) {
         });
         if (data?.categoryDelete) {
           setSelected([]);
-          if (refetch) refetch();
-          dispatch(
-            openAlert({
-              severity: "success",
-              message: "CATEGORY_DELETED",
-            })
-          );
+          refetch();
+          handleAlertDispatch({
+            severity: "success",
+            message: "CATEGORY_DELETED",
+          });
         }
       } catch (error) {
         console.error(error);
@@ -107,8 +103,8 @@ function CategoryTable({ shopId }: any) {
         showCredActions
         shouldSingleSelect
         handleAddActionClick={() => setOpen(true)}
-        handleEditActionClick={handleEditCategoryClick}
-        handleDeleteActionClick={handleDeleteCategoryClick}
+        handleEditActionClick={handleEditClick}
+        handleDeleteActionClick={handleDeleteClick}
         {...tableCategories}
         selected={selected}
         setSelected={setSelected}
@@ -127,7 +123,7 @@ function CategoryTable({ shopId }: any) {
           {updateData?.id ? "Update Category" : "Create Category"}
         </Typography>
         <CategoryForm
-          onSuccess={(data: string) => handleCategoryChange(data)}
+          onSuccess={(data: string) => handleEntryUpdate(data)}
           btnText={updateData?.id ? "update" : "Create"}
           shopId={shopId}
           {...updateData}
