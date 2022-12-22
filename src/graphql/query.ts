@@ -20,7 +20,6 @@ export const AUTHENTICATE = gql`
         lastName
         email
         mobileNumber
-        hasPasscode
         emailVerified
         updatedAt
         mobileVerified
@@ -104,5 +103,11 @@ export const GET_PRODUCT = gql`
       updatedAt
       createdAt
     }
+  }
+`;
+
+export const ENABLE_POS = gql`
+  mutation EnablePOS($shopId: Int!) {
+    enablePOS(shopId: $shopId)
   }
 `;

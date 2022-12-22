@@ -32,6 +32,35 @@ export default function withAuthorization(
       if (authorizedFor === "shouldNotBeNoOne" && event.key === "login") {
         Router.push("/");
       }
+      if (
+        ["shouldBePOS", "shouldBePOSEmployee"].includes(authorizedFor) &&
+        event.key === "pos_logout"
+      ) {
+        Router.push("/");
+      }
+
+      if (
+        "shouldBePOSEmployee" === authorizedFor &&
+        event.key === "pos_emp_logout"
+      ) {
+        Router.push("/pos");
+      }
+
+      if (
+        ["shouldBeUser", "shouldNotBeAnyOne"].includes(authorizedFor) &&
+        event.key === "pos_emp_login"
+      ) {
+        Router.push("/pos");
+      }
+
+      if (
+        ["shouldBeUser", "shouldNotBeAnyOne", "shouldBePOSEmployee"].includes(
+          authorizedFor
+        ) &&
+        event.key === "pos_login"
+      ) {
+        Router.push("/pos");
+      }
     };
     useEffect(() => {
       window.addEventListener("storage", handleStorageEvent);

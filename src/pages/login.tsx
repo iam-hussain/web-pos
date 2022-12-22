@@ -1,7 +1,6 @@
 import React from "react";
 import { Formik } from "formik";
 import { useMutation } from "@apollo/client";
-import { useRouter } from "next/router";
 import { Box, Paper, Typography } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Login from "@mui/icons-material/Login";
@@ -16,7 +15,6 @@ import { loginValidation } from "@helpers/validationSchema";
 import AuthOption from "@components/molecules/auth-option";
 
 function LogIn() {
-  const router = useRouter();
   const { setToken } = useToken();
   const [loading, setLoading] = React.useState(false);
   const [mutateFunction] = useMutation(USER_LOGIN);
@@ -31,7 +29,6 @@ function LogIn() {
       const jwt = _.get(result, "data.userLogin");
       if (jwt) {
         setToken(jwt);
-        router.push("/");
       } else {
         setSubmitting(false);
         setLoading(false);

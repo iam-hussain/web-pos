@@ -10,6 +10,7 @@ import { HEADER_TOKEN_KEY } from "@providers/constants";
 import { getCookie } from "cookies-next";
 import { pushRouter } from "@helpers/serverSide";
 import ProductTable from "@components/organisms/product-table";
+import EnablePOSButton from "@components/organisms/enable-pos-btn";
 
 function OneOutlet({ shop }: any) {
   return (
@@ -42,6 +43,7 @@ function OneOutlet({ shop }: any) {
             {shop.slug}
           </Typography>
         </div>
+        <EnablePOSButton shopId={shop.id} />
       </Box>
       <Grid
         container
@@ -67,26 +69,31 @@ OneOutlet.getInitialProps = async (ctx: any) => {
   if (isNaN(Number(outletId))) {
     pushRouter(ctx, "/outlet");
   }
-  const token = getCookie(HEADER_TOKEN_KEY, ctx);
-  const apolloClient = initializeApollo();
-  const fetchData = await apolloClient.query({
-    query: GET_SHOP,
-    context: {
-      headers: {
-        [HEADER_TOKEN_KEY]: token,
+  try {
+    const token = getCookie(HEADER_TOKEN_KEY, ctx);
+    const apolloClient = initializeApollo();
+    const fetchData = await apolloClient.query({
+      query: GET_SHOP,
+      context: {
+        headers: {
+          [HEADER_TOKEN_KEY]: token,
+        },
       },
-    },
-    variables: {
-      shopId: Number(outletId),
-    },
-  });
-  const shop = fetchData?.data?.getShop || {};
-  if (!shop.id) {
+      variables: {
+        shopId: Number(outletId),
+      },
+    });
+    const shop = fetchData?.data?.getShop || {};
+    if (!shop.id) {
+      pushRouter(ctx, "/outlet");
+    }
+    return {
+      shop,
+    };
+  } catch (error) {
+    console.error(error);
     pushRouter(ctx, "/outlet");
   }
-  return {
-    shop,
-  };
 };
 
 export default withAuthorization(OneOutlet, "shouldBeUser");

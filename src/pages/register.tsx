@@ -3,7 +3,6 @@ import { Formik } from "formik";
 import { useQuery, useMutation } from "@apollo/client";
 import { Box, Paper, Typography } from "@mui/material";
 import AppRegistration from "@mui/icons-material/AppRegistration";
-import { useRouter } from "next/router";
 import { USER_REGISTER } from "@graphql/mutation";
 import { USER_DUPLICATE_CHECK } from "@graphql/query";
 import IslandLayout from "@components/templates/island-layout";
@@ -17,7 +16,6 @@ import AuthOption from "@components/molecules/auth-option";
 import LoadingButton from "@mui/lab/LoadingButton";
 
 function Register() {
-  const router = useRouter();
   const { setToken } = useToken();
   const [loading, setLoading] = React.useState(false);
   const [mutateFunction] = useMutation(USER_REGISTER);
@@ -51,7 +49,6 @@ function Register() {
         const jwt = _.get(result, "data.userRegister");
         if (jwt) {
           setToken(jwt);
-          router.push("/");
         } else {
           setSubmitting(false);
           setLoading(false);
