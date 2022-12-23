@@ -111,3 +111,27 @@ export const ENABLE_POS = gql`
     enablePOS(shopId: $shopId)
   }
 `;
+
+export const GET_SHOP_CONNECTS = gql`
+  query GetShopConnects($shopId: Int!) {
+    getShopConnects(shopId: $shopId) {
+      id
+      role
+      salary
+      joined
+      hasPasscode
+      isActive
+      updatedAt
+      createdAt
+      user {
+        firstName
+        lastName
+        id
+        email
+        mobileNumber
+        emailVerified
+        mobileVerified
+      }
+    }
+  }
+`;

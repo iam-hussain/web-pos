@@ -1,50 +1,40 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import {
-  transformTableCategory,
-  transformSelectCategory,
-} from "@transformers/category";
 
 type InitialState = {
   loading: boolean;
   error: boolean;
   called: boolean;
-  categories: any[];
-  tableCategories: any;
-  selectCategories: any[];
+  products: any[];
 };
 
 const initialState: InitialState = {
-  loading: false,
+  loading: true,
   error: false,
   called: false,
-  categories: [],
-  tableCategories: {},
-  selectCategories: [],
+  products: [],
 };
 
 export const Slice = createSlice({
-  name: "category",
+  name: "product",
   initialState,
   reducers: {
-    setCategoryLoading: (state) => {
+    setProductLoading: (state) => {
       return {
         ...state,
         called: true,
         loading: true,
       };
     },
-    setCategories: (_, action: PayloadAction<any>) => {
+    setProducts: (state, action: PayloadAction<any>) => {
       return {
         loading: false,
         error: false,
         called: true,
-        categories: action.payload,
-        tableCategories: transformTableCategory(action.payload),
-        selectCategories: transformSelectCategory(action.payload),
+        products: action.payload,
       };
     },
-    catchCategories: () => {
+    catchProducts: (state) => {
       return {
         ...initialState,
         loading: false,
@@ -52,17 +42,13 @@ export const Slice = createSlice({
         called: true,
       };
     },
-    resetCategories: () => {
+    resetProducts: () => {
       return initialState;
     },
   },
 });
 // Action creators are generated for each case reducer function
-export const {
-  setCategories,
-  catchCategories,
-  resetCategories,
-  setCategoryLoading,
-} = Slice.actions;
+export const { setProducts, catchProducts, resetProducts, setProductLoading } =
+  Slice.actions;
 
 export default Slice.reducer;

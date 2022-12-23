@@ -7,6 +7,8 @@ import Router from "next/router";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { pushRouter } from "@helpers/serverSide";
+import useFetchPOS from "@hooks/useFetchPOS";
+import { resetShop, setShop } from "@reducers/shopSlice";
 
 export default function withAuthorization(
   Component: JSX.Element | any,
@@ -19,6 +21,7 @@ export default function withAuthorization(
 ) {
   const AuthWrapper = (props: any) => {
     const dispatch = useDispatch();
+    const fetchPOS = useFetchPOS();
     const { authenticate } = props;
     const handleStorageEvent = (event: any) => {
       if (
@@ -70,6 +73,17 @@ export default function withAuthorization(
     }, []);
 
     useEffect(() => {
+      console.log({ authenticate, shop: authenticate?.shop?.id });
+      if (authenticate?.shop?.id) {
+        fetchPOS.fetchAll(authenticate?.shop.id);
+        dispatch(setShop(authenticate?.shop));
+      } else {
+        dispatch(resetShop());
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
       if (authenticate) {
         dispatch(authUpdate(authenticate));
       }
@@ -106,11 +120,12 @@ export default function withAuthorization(
       token,
       isAuthenticated,
       ...authData,
-      hasUser: (isAuthenticated && hasUser && user) || false,
-      hasShop: (isAuthenticated && hasShop && shop) || false,
-      isPOS: (isAuthenticated && isPOS && shop) || false,
-      isPOSEmp: (isAuthenticated && user && isPOS && shop) || false,
-      isUser: (isAuthenticated && user && !isPOS) || false,
+      hasUser: Boolean(isAuthenticated && hasUser && user) || false,
+      hasShop: Boolean(isAuthenticated && hasShop && shop?.id) || false,
+      isPOS: Boolean(isAuthenticated && isPOS && shop?.id) || false,
+      isPOSEmp:
+        Boolean(isAuthenticated && user?.id && isPOS && shop?.id) || false,
+      isUser: Boolean(isAuthenticated && user?.id && !isPOS) || false,
     };
 
     if (authorizedFor === "shouldBeUser" && !authenticate.hasUser) {
